@@ -6,35 +6,29 @@
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="host-container">
-    <img src="/static/logo.png" class="logo-small">
-    <h1>🎤 Панель ведущего</h1>
-    <div id="qr-section">
-        <p>Сканируйте, чтобы присоединиться 📱</p>
-        <img src="data:image/png;base64,{{ qr_image }}" width="200" style="border-radius:10px;">
-        <p style="color:#fff; font-size:14px;">{{ join_url }}</p>
-    </div>
-    <input type="password" id="password" placeholder="Пароль">
-    <button onclick="checkPass()">Войти</button>
-    <div id="controls" style="display:none;">
-        <p id="status">Ожидание старта...</p>
-        <button onclick="nextQuestion()">Следующий вопрос ▶️</button>
-        <a href="/results" target="_blank"><button>Показать результаты</button></a>
-    </div>
+<div class="container">
+<h1>🎤 Панель ведущего</h1>
+<p>Введите пароль, чтобы начать:</p>
+<input type="password" id="password" placeholder="Пароль">
+<button onclick="checkPass()">Войти</button>
+<div id="controls" style="display:none;">
+<h2>Управление викториной</h2>
+<button onclick="nextQuestion()">Следующий вопрос ▶️</button>
+<a href="/results" target="_blank"><button>Показать результаты</button></a>
+</div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
 <script>
 const socket = io();
 function checkPass(){
-    if(document.getElementById("password").value==="radiologyadmin"){
-        document.getElementById("controls").style.display="block";
-        document.getElementById("qr-section").style.display="block";
-    } else alert("Неверный пароль!");
+if(document.getElementById('password').value === 'radiologyadmin'){
+document.getElementById('controls').style.display = 'block';
+} else alert('Неверный пароль!');
 }
 function nextQuestion(){
-    socket.emit("next_question", {});
-    document.getElementById("status").innerText="Вопрос отправлен!";
+socket.emit('next_question', {});
 }
 </script>
 </body>
