@@ -63,7 +63,43 @@ function startTimer(seconds) {
         }
     }, 1000);
 }
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+<script>
+  const socket = io();
+
+  const username = "{{ username }}";
+
+  socket.emit('join', { username });
+
+  socket.on('joined', () => {
+    console.log("Подключено!");
+  });
+
+  // Когда ведущий отправляет сигнал на новый вопрос:
+  socket.on('new_question', () => {
+    socket.emit('get_question', { username });
+  });
+
+  // Когда сервер присылает вопрос:
+  socket.on('question', (data) => {
+    document.getElementById("question").innerText = data.text;
+    const opts = data.options.map((o, i) =>
+      `<button onclick="sendAnswer(${i})">${o}</button>`
+    ).join("");
+    document.getElementById("options").innerHTML = opts;
+  });
+
+  // Когда викторина завершена:
+  socket.on('end', (data) => {
+    document.body.innerHTML = `<h2>${data.message}</h2><a href="/results">Посмотреть результаты</a>`;
+  });
+
+  function sendAnswer(i) {
+    socket.emit('answer', { username, answer: i });
+  }
 </script>
-</body>
+
+</body><h2 id="question">Ожидание начала...</h2>
+<div id="options"></div>
 </html>
 
