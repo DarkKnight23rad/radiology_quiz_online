@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO, emit
-import qrcode
 import io
 import base64
 import random
@@ -52,14 +51,7 @@ quiz_active = False
 # ------------------------------
 # Вспомогательные функции
 # ------------------------------
-def generate_qr(url):
-    qr = qrcode.QRCode(box_size=4, border=2)
-    qr.add_data(url)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-    buffer = io.BytesIO()
-    img.save(buffer)  # ✅ убрали параметр format
-    return base64.b64encode(buffer.getvalue()).decode("utf-8")
+
 
 
 def assign_titles(sorted_players):
@@ -172,25 +164,7 @@ def handle_next():
 # ------------------------------
 # Запуск
 # ------------------------------
-if __name__ == '__main__':
-    import webbrowser
 
-    url = "http://127.0.0.1:5000/join"
-    qr_img = generate_qr(url)
-    qr_img_base64 = qr_img  # теперь переменная уже создана ✅
-
-    print("✅ Сервер запущен!")
-    print("Сканируйте QR-код для входа в викторину:")
-    print(url)
-
-    # создаём файл с QR-кодом
-    with open("qr.png", "wb") as f:
-        f.write(base64.b64decode(qr_img))
-
-    # автоматически открываем ссылку в браузере
-    webbrowser.open(url)
-
-    socketio.run(app, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)
 
 
 
