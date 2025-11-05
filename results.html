@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Результаты</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="results-container">
+    <h1>🏆 Результаты Radiology Challenge</h1>
+    <table>
+        <tr><th>Имя</th><th>Баллы</th><th>Титул</th></tr>
+        {% for name, data, title in results %}
+        <tr>
+            <td>{{ name }}</td>
+            <td>{{ data['score'] }}</td>
+            <td>{{ title }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p>Спасибо за участие! 🎉</p>
+</div>
+</body>
+</html>

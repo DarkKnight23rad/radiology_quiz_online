@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Викторина</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="quiz-container">
+    <h1>🩻 Radiology Challenge</h1>
+    <div id="question-box">
+        <p id="question-text">Ожидайте начала...</p>
+        <div id="options"></div>
+        <div id="timer"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+const socket = io();
+const username = "{{ username }}";
+let timerInterval;
+socket.emit("join", {username});
+
+socket.on("new_question", () => {
+    socket.emit("get_question", {});
+});
+
+socket.on("question", data => {
+    document.getElementById("question-text").innerText = `${data.index}/${data.total}: ${data.text}`;
+    const box = document.getElementById("options");
+    box.innerHTML = "";
+    data.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => answer(i);
+        box.appendChild(btn);
+    });
+    startTimer(data.time);
+});
+
+socket.on("end", data => {
+    window.location.href = "/results";
+});
+
+function answer(i) {
+    socket.emit("answer", {username, answer: i});
+    clearInterval(timerInterval);
+    document.getElementById("question-text").innerText = "Ответ принят, ждите следующий вопрос...";
+    document.getElementById("options").innerHTML = "";
+}
+
+function startTimer(seconds) {
+    const timer = document.getElementById("timer");
+    timer.textContent = `⏱ Осталось ${seconds} сек`;
+    timerInterval = setInterval(() => {
+        seconds--;
+        if (seconds <= 0) {
+            clearInterval(timerInterval);
+            timer.textContent = "⏱ Время вышло!";
+        } else {
+            timer.textContent = `⏱ Осталось ${seconds} сек`;
+        }
+    }, 1000);
+}
+</script>
+</body>
+</html>
