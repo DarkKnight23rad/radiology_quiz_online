@@ -97,7 +97,7 @@ def host():
     url = "http://127.0.0.1:5000/join"
     if not qr_img_base64:
         qr_img_base64 = generate_qr(url)
-    return render_template('host.html', qr_image=qr_img_base64, join_url=url)
+    return render_template('host.html', join_url=url)
 
 
 
@@ -164,6 +164,7 @@ def handle_next():
 # ------------------------------
 # Запуск
 # ------------------------------
+
 
 
 
