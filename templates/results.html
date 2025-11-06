@@ -2,18 +2,18 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Результаты викторины</title>
+<title>Результаты</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="container">
-<h1>🏁 Итоги Radiology Day Quiz</h1>
-<table>
-<tr><th>Участник</th><th>Очки</th></tr>
-{% for name, data in results %}
-<tr><td>{{ name }}</td><td>{{ data.score }}</td></tr>
-{% endfor %}
-</table>
+  <h1>🏁 Итоги Radiology Day Quiz</h1>
+  <table>
+    <tr><th>Участник</th><th>Очки</th></tr>
+    {% for name, data in results %}
+      <tr><td>{{ name }}</td><td>{{ data.score }}</td></tr>
+    {% endfor %}
+  </table>
 </div>
 </body>
 </html>
