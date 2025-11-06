@@ -7,8 +7,8 @@ eventlet.monkey_patch()
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
-HOST_PASSWORD = "radiologyadmin"
 TIME_LIMIT = 15  # секунд
+HOST_PASSWORD = "radiologyadmin"
 
 questions = [
     {"text": "Какое излучение используется при КТ?", "options": ["Рентгеновское", "Инфракрасное", "Ультрафиолетовое"], "correct": 0},
