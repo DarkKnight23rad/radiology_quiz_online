@@ -7,40 +7,36 @@
 </head>
 <body>
 <div class="container">
-<h2 id="question">Ожидание начала...</h2>
-<div id="options"></div>
+  <h2 id="question">Ожидание начала викторины...</h2>
+  <div id="options"></div>
 </div>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
 <script>
 const socket = io();
 const username = "{{ username }}";
 
-
 socket.emit('join', {username});
 
-
-socket.on('new_question', ()=>{
-socket.emit('get_question', {username});
-});
-
+socket.on('new_question', ()=> socket.emit('get_question', {username}));
 
 socket.on('question', (data)=>{
-document.getElementById('question').innerText = data.text;
-const opts = data.options.map((opt, i)=>`<button onclick="sendAnswer(${i})">${opt}</button>`).join('');
-document.getElementById('options').innerHTML = opts;
+  document.getElementById('question').innerText = data.text;
+  const opts = data.options.map((opt, i)=>`<button onclick="sendAnswer(${i})">${opt}</button>`).join('');
+  document.getElementById('options').innerHTML = opts;
 });
-
 
 socket.on('end', (data)=>{
-document.body.innerHTML = `<h2>${data.message}</h2><a href='/results'>Посмотреть результаты</a>`;
+  document.body.innerHTML = `<h2>${data.message}</h2><a href='/results'>Посмотреть результаты</a>`;
 });
 
+socket.on('show_results', ()=>{
+  window.location.href = '/results';
+});
 
 function sendAnswer(i){
-socket.emit('answer', {username, answer: i});
-document.getElementById('options').innerHTML = '<p>Ответ принят! Ожидайте следующий вопрос...</p>';
+  socket.emit('answer', {username, answer: i});
+  document.getElementById('options').innerHTML = '<p>Ответ принят! Ожидайте следующий вопрос...</p>';
 }
 </script>
 </body>
